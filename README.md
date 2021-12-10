@@ -1,35 +1,155 @@
-# Take Home Challenge Level (Senior-Level)
+# Gaggle Backend Project
+This is a backend API project that is building in NodeJS.  It would provide information to the frontend developer.  The `REQUIREMENTS.md` would show database schema and API route information.  We will provide some example below.
 
-## Overview
-This exercise is meant to showcase your technical implementation & design abilities.
+## Table of Contents
+* [General Info](#general-information)
+* [Technologies](#technologies)
+* [Set up database](#set-up-database)
+* [Establish Environment Variables](#establish-environment-variables)
+* [Install](#install)
+* [Instruction of API Request](#instruction-of-api-request)
+* [Contact](#contact)
 
-Please implement the following set of requirements. It is expected that you will fork this repository in GitHub and share the link with us when complete.
+## General Information
+Front-end Developers would have an opportunity to search the data based on person's id or name.  
+
+## Technologies 
+- TypeScript
+- Express
+- ESLint
+- Prettier
+- Jasmine
+- NPM
+- NodeJS
+- Migration
+
+## Set up database
+
+Install PostgresSQL
+
+Create database and user (you can use pgAdmin 4 app as well)
+- Go to new command or terminal
+- Type the following: psl -U postgres
+- CREATE USER gaggle_user WITH PASSWORD 'gaggleuserpassword';
+- Then do the following to create database
+  - CREATE DATABASE people_movies_dev;
+
+Connect to the database
+- Type the following: \c people_movies_dev
+
+Grant all priviledges
+- Type the following: GRANT ALL PRIVILEDGES ON DATABASE people_movies_dev TO gaggle_user;
+
+Establish new tables on the database, people_movies_dev
+- Open new terminal and change to the root directory of this project
+- Type the following at the command: npm run migrate-up-dev
+
+## Environment Variables
+- Create new file called .env on your root directory
+- Open the file in your editor
+- Copy the following in your file except you would need to change few things
+  - POSTGRES_HOST=127.0.0.1
+  - POSTGRES_DEV_DB=people_movies_dev
+  - POSTGRES_PROD_DB=people_movies_prod
+  - POSTGRES_USER=postgres
+  - POSTGRES_PASSWORD=postgres
+  - ENV=DEV
+  - PORT=3000
+  
+## Install
+Install all the modules
+```
+npm install
+```
+Build or Convert TypeScript to JavaScript
+```
+npm run build
+```
+Run migration for dev (up)
+```
+npm run migrate-up-dev
+```
+Run migration for dev (down)
+```
+npm run migrate-down-dev
+```
+Run migration for prod (up)
+```
+npm run migrate-up-prod
+```
+Run migration for prod (down)
+```
+npm run migrate-down-prod
+```
+Start the server which will start nodemon based on src/index.ts
+```
+npm run start-ts 
+```
+Start the server which will start node based on dist/src/index.js
+```
+npm run start-js 
+```
+Run the test including running the migration such as down and up and Jasmine
+```
+npm run test-dev-ts  
+```
+To keep the code look clean and nice, run the following command:
+```
+npm run prettier
+```
+To check any variable or analyze any code that may look the problem, run the following command:
+```
+npm run lint
+```
+
+## Instruction of API Request
+People 
+- Create new person [POST]
+  - Example: http://localhost:3000/api/person ( { name: 'Patrick' } )
+  - Input: name
+  - Return: person's information in JSON (id,name) or error message if any
+- Get all list of people [GET]
+  - Example: http//localhost:3000/api/people
+  - Input: none 
+  - Return: list of people in JSON
+- Get person's information based on person's id [GET]
+  - Example: http://localhost:3000/api/people/1
+  - Input: person's id
+  - Return: person's information in JSON (id, name) or error message if any
+
+Movie
+- Create new movie [POST]
+  - Example: http://localhost:3000/api/movie ( { name: 'Back to the Future' } )
+  - Input: name
+  - Return: movie's information in JSON (id,name) or error message if any
+- Get all list of movies [GET]
+  - Example: http//localhost:3000/api/movies
+  - Input: none 
+  - Return: list of movies in JSON
+- Get movie's information based on movie's id [GET]
+  - Example: http://localhost:3000/api/movies/1
+  - Input: movie's id
+  - Return: movie's information in JSON (id, name) or error message if any
+
+People-Movie
+- Create new people-movie [POST]
+  - Example: http://localhost:3000/api/peoplemovies ( { person_id: 1, movie_id: 1 } )
+  - Input: person's id, movie's id
+  - Return: people-movie's information in JSON (id,person_id,movie_id) or error message if any
+- Get all list of people-movies [GET]
+  - Example: http//localhost:3000/api/peoplemovies
+  - Input: none 
+  - Return: list of people-movies in JSON
+
+app.post('/api/search', getFullDataBasedOnPersonNameOrId);
+
+Search
+- Get list of results based on search's input [POST]
+  - Example: http://localhost:3000/api/search ( { person_id: 1 } OR { person_name: 'AT' })
+  - Input: person's id or person's name
+  - Return: list of results in JSON (person_id, person_name, movie_id, movie_name)
+  
+## Contact
+Created by [Patrick Wallin](https://www.linkedin.com/in/patrick-wallin) - feel free to contact me!
 
 
-## Functional Requirements
-
-For the purposes of the exercise, pretend you're on a team working on a new website that customers can use to look up information about movies.  Other team members are handling the front end, but you've been given the following task:
-
-* We need to store a catalog of People.  Each person needs a unique ID, name, and what movies they worked on.  
-* Create a web service that allows for two operations: searching for a person by either the unique ID, or by their name.  Partial name search should work, so if the a Person's full name is "Bruce Wayne", then it should be reasonable for the function to return this result given any of the following search strings: "bru", "Bruce", "Wayne", "Bruce Wayne", etc.
-* Both the inputs and outputs of these operations should be formatted in JSON.
-
-
-## Non-Functional Requirements
-
-* Include documentation about your development environment and instructions on how to run your program.
-* Include tests and instructions on how to run the tests.
-* The assignment need only execute from a local machine, and there are no requirements to deploy the implementation anywhere else.
-* Unless otherwise specified, feel free to use the language, frameworks, or technogies of your choice, but be prepared to discuss why you chose what you did.
-* For the purposes of this task, you don't need to worry about updating the data, but it should be updatable - lots of new movies come out every year!
-* Bonus: Leverage dependency injection.
-
-
-## Some Example Data
-
-(You're not required to use this data, but if you need some test data you can use this to get started.)
-
-- Troy McClure starred in "Earwigs: Eww!", "Man vs. Nature: The Road to Victory", "McBain IV", and "The Contrabulous Fabtraption of Professor Horatio Hufnagel".
-- Rainier Wolfcastle starred in "McBain" 1–4, and "Radioactive Man".
-- Steve Zissou directed "The Jaguar Shark".
-- Antonio Calculon, Sr stars in "All My Circuits".
