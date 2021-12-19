@@ -141,8 +141,6 @@ People-Movie
   - Input: none 
   - Return: list of people-movies in JSON
 
-app.post('/api/search', getFullDataBasedOnPersonNameOrId);
-
 Search
 - Get list of results based on search's input [POST]
   - Example: http://localhost:3000/api/search ( { person_id: 1 } OR { person_name: 'AT' })
